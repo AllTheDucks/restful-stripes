@@ -20,22 +20,22 @@ public class RestfulExceptionHandlerTest {
 
     @Test
     public void testRestfulException_withRestfulActionBean() throws Exception {
-        testAction(RestfulExceptionHandlerRestfulActionBeanTestAction.class, "throwRestfulException", "\"message\":\"Argh\"", 500);
+        testAction(RestfulExceptionHandlerRestfulActionBeanTestAction.class, "throwRestfulException", "{\"message\":\"Argh\",\"exceptionClass\":\"RestfulException\",\"canonicalExceptionClass\":\"com.alltheducks.stripes.rest.RestfulException\"}", 500);
     }
 
     @Test
     public void testException_withRestfulActionBean() throws Exception {
-        testAction(RestfulExceptionHandlerRestfulActionBeanTestAction.class, "throwException", "\"message\":\"Argh\"", 500);
+        testAction(RestfulExceptionHandlerRestfulActionBeanTestAction.class, "throwException", "{\"message\":\"Argh\",\"exceptionClass\":\"Exception\",\"canonicalExceptionClass\":\"java.lang.Exception\"}", 500);
     }
 
     @Test
     public void testRestfulException501_withRestfulActionBean() throws Exception {
-        testAction(RestfulExceptionHandlerRestfulActionBeanTestAction.class, "throwRestfulException501", "\"message\":\"Argh\"", 501);
+        testAction(RestfulExceptionHandlerRestfulActionBeanTestAction.class, "throwRestfulException501", "{\"message\":\"Argh\",\"exceptionClass\":\"RestfulException\",\"canonicalExceptionClass\":\"com.alltheducks.stripes.rest.RestfulException\"}", 501);
     }
 
     @Test
     public void testRestfulException_withActionBean() throws Exception {
-        testAction(RestfulExceptionHandlerActionBeanTestAction.class, "throwRestfulException", "\"message\":\"Argh\"", 500);
+        testAction(RestfulExceptionHandlerActionBeanTestAction.class, "throwRestfulException", "{\"message\":\"Argh\",\"exceptionClass\":\"RestfulException\",\"canonicalExceptionClass\":\"com.alltheducks.stripes.rest.RestfulException\"}", 500);
     }
 
     @Test(expected = Exception.class)
@@ -50,13 +50,13 @@ public class RestfulExceptionHandlerTest {
         }
     }
 
-    private void testAction(Class<? extends ActionBean> bean, String action, String expectedOutputContains, int httpStatusCode) throws Exception {
+    private void testAction(Class<? extends ActionBean> bean, String action, String expectedOutput, int httpStatusCode) throws Exception {
         final MockServletContext context = constructContext();
         try {
             MockRoundtrip mockRoundtrip = new MockRoundtrip(context, bean);
             mockRoundtrip.execute(action);
 
-            assertTrue(String.format("Response should contain string '%s'", expectedOutputContains), mockRoundtrip.getOutputString().contains(expectedOutputContains));
+            assertEquals(expectedOutput, mockRoundtrip.getOutputString());
             assertEquals(httpStatusCode, mockRoundtrip.getResponse().getStatus());
             assertNull(mockRoundtrip.getDestination());
         }
