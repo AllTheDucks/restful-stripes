@@ -1,6 +1,7 @@
 package com.alltheducks.stripes.rest;
 
-import com.alltheducks.stripes.rest.actions.RestfulActionResolverTestAction;
+import com.alltheducks.stripes.rest.actions.JsonResolutionTestAction;
+import com.alltheducks.stripes.rest.actions.ValidationErrorsTestAction;
 import net.sourceforge.stripes.controller.DispatcherServlet;
 import net.sourceforge.stripes.controller.StripesFilter;
 import net.sourceforge.stripes.mock.MockRoundtrip;
@@ -10,36 +11,31 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-public class RestfulActionResolverTest {
-
-    @Test
-    public void testGet() throws Exception {
-        testAction("GET", "\"get\"");
-    }
+public class RestfulActionBeanTest {
 
     @Test
-    public void testPut() throws Exception {
-        testAction("PUT", "\"put\"");
+    public void testValidationErrors() throws Exception {
+        testAction("returnValidationErrors", "{" +
+                "\"anInt\":[{\"message\":null," +
+                "\"replacementParameters\":[null,null]," +
+                "\"actionPath\":\"/rest/actions/ValidationErrorsTest.action\"," +
+                "\"beanclass\":\"com.alltheducks.stripes.rest.actions.ValidationErrorsTestAction\"," +
+                "\"messageKey\":\"validation.required.valueNotPresent\"," +
+                "\"defaultScope\":\"validation.required\"," +
+                "\"key\":\"valueNotPresent\"," +
+                "\"fieldName\":\"anInt\"," +
+                "\"fieldValue\":null}]" +
+                "}");
     }
 
-    @Test
-    public void testPost() throws Exception {
-        testAction("POST", "\"post\"");
-    }
-
-    @Test
-    public void testDelete() throws Exception {
-        testAction("DELETE", "\"delete\"");
-    }
-
-    public void testAction(String httpMethod, String expectedOutput) throws Exception {
+    private void testAction(String action, String expectedOutput) throws Exception {
         final MockServletContext context = constructContext();
         try {
-            MockRoundtrip mockRoundtrip = new MockRoundtrip(context, RestfulActionResolverTestAction.class);
-            mockRoundtrip.getRequest().setMethod(httpMethod);
-            mockRoundtrip.execute();
+            MockRoundtrip mockRoundtrip = new MockRoundtrip(context, ValidationErrorsTestAction.class);
+            mockRoundtrip.execute(action);
 
             assertEquals(expectedOutput, mockRoundtrip.getOutputString());
             assertNull(mockRoundtrip.getDestination());
@@ -55,7 +51,6 @@ public class RestfulActionResolverTest {
         // Add the Stripes Filter
         Map<String, String> filterParams = new HashMap<String, String>();
         filterParams.put("ActionResolver.Packages", "com.alltheducks.stripes.rest.actions");
-        filterParams.put("ActionResolver.Class", "com.alltheducks.stripes.rest.RestfulActionResolver");
         context.addFilter(StripesFilter.class, "StripesFilter", filterParams);
 
         // Add the Stripes Dispatcher

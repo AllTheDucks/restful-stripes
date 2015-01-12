@@ -9,7 +9,7 @@ import net.sourceforge.stripes.action.Resolution;
 /**
  * Created by Shane Argo on 9/01/15.
  */
-public class RestfulActionResolverTestAction implements RestfulActionBean {
+public class RestfulActionResolverTestAction extends RestfulActionBean {
 
     private ActionBeanContext context;
 
@@ -38,4 +38,5 @@ public class RestfulActionResolverTestAction implements RestfulActionBean {
     public ActionBeanContext getContext() {
         return context;
     }
+
 }

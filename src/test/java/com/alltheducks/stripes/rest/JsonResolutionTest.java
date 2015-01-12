@@ -77,7 +77,7 @@ public class JsonResolutionTest {
             MockRoundtrip mockRoundtrip = new MockRoundtrip(context, JsonResolutionTestAction.class);
             mockRoundtrip.execute(action);
 
-            assertEquals(mockRoundtrip.getOutputString(), expectedOutput);
+            assertEquals(expectedOutput, mockRoundtrip.getOutputString());
             assertNull(mockRoundtrip.getDestination());
         }
         finally {
