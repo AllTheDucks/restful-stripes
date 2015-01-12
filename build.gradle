@@ -5,7 +5,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.5'
+
     compile 'net.sourceforge.stripes:stripes:1.5.7'
     compile 'javax.servlet:servlet-api:2.5'
 
@@ -14,4 +14,8 @@ dependencies {
 
     testCompile 'junit:junit:4.11',
                 'javax.servlet.jsp.jstl:jstl-api:1.2-rev-1'
+
+    testCompile 'org.slf4j:slf4j-api:1.7.5',
+                'org.slf4j:slf4j-log4j12:1.7.5'
+
 }
