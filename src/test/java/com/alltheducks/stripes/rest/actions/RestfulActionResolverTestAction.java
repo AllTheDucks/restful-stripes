@@ -21,6 +21,14 @@ public class RestfulActionResolverTestAction implements RestfulActionBean {
         return new JsonResolution("put");
     }
 
+    public Resolution post() {
+        return new JsonResolution("post");
+    }
+
+    public Resolution delete() {
+        return new JsonResolution("delete");
+    }
+
     @Override
     public void setContext(ActionBeanContext context) {
         this.context = context;
