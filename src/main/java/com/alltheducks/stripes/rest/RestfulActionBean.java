@@ -1,6 +1,6 @@
 package com.alltheducks.stripes.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alltheducks.stripes.rest.jackson.ObjectMapperManagerFactory;
 import net.sourceforge.stripes.action.ActionBean;
 import net.sourceforge.stripes.action.Resolution;
 import net.sourceforge.stripes.validation.ValidationErrorHandler;
@@ -13,7 +13,7 @@ public abstract class RestfulActionBean implements ActionBean, ValidationErrorHa
 
     @Override
     public Resolution handleValidationErrors(ValidationErrors errors) throws Exception {
-        return new JsonResolution(errors, new ObjectMapper());
+        return new JsonResolution(errors, ObjectMapperManagerFactory.getObjectMapperManager().getObjectMapper());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.alltheducks.stripes.rest;
 
+import com.alltheducks.stripes.rest.jackson.ObjectMapperManagerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sourceforge.stripes.action.StreamingResolution;
 
@@ -16,7 +17,7 @@ public class JsonResolution extends StreamingResolution {
     final private ObjectMapper objectMapper;
 
     public JsonResolution(Object object) {
-        this(object, new ObjectMapper());
+        this(object, ObjectMapperManagerFactory.getObjectMapperManager().getObjectMapper());
     }
 
     public JsonResolution(Object object, ObjectMapper objectMapper) {

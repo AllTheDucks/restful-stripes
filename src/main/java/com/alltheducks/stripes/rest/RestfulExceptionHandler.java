@@ -1,5 +1,6 @@
 package com.alltheducks.stripes.rest;
 
+import com.alltheducks.stripes.rest.jackson.ObjectMapperManagerFactory;
 import com.alltheducks.stripes.rest.model.JsonExceptionModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sourceforge.stripes.action.ActionBean;
@@ -22,7 +23,7 @@ public class RestfulExceptionHandler extends DefaultExceptionHandler {
 
     public Resolution handleRestfulException(RestfulException ex, HttpServletRequest request, HttpServletResponse response) {
         response.setStatus(ex.getHttpStatusCode());
-        return new JsonResolution(new JsonExceptionModel(ex), objectMapper);
+        return new JsonResolution(new JsonExceptionModel(ex), ObjectMapperManagerFactory.getObjectMapperManager().getObjectMapper());
     }
 
     public Resolution handleGeneric(Exception ex, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,7 +31,7 @@ public class RestfulExceptionHandler extends DefaultExceptionHandler {
 
         if(bean != null && bean instanceof RestfulActionBean) {
             response.setStatus(RestfulException.DEFAULT_HTTP_STATUS_CODE);
-            return new JsonResolution(new JsonExceptionModel(ex), objectMapper);
+            return new JsonResolution(new JsonExceptionModel(ex), ObjectMapperManagerFactory.getObjectMapperManager().getObjectMapper());
         }
 
         if(ex instanceof ServletException) {
